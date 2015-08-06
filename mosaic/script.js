@@ -5,17 +5,17 @@
   var start = 0.00;
   var steps = 0;
 
-  function Timer() {
+  function Timer(el, tick) {
     var t = setTimeout(function() {
-      $('#timer').text((start += 0.01).toFixed(2));
+      $(el).text((start += 0.01).toFixed(2));
       if (timerOn) {
-        Timer();
+        Timer(el, tick);
       }
       else {
         timerOn = false;
         clearTimeout(t);
       }
-    }, 1000);
+    }, tick);
   }
 
   function Blue(selector) {
@@ -43,7 +43,7 @@
     var _self = this;
     $('#steps').text(++steps);
     if (!timerOn) {
-      Timer();
+      Timer('#timer', 1000);
       timerOn = true;
     }
     var r = parseInt($(_self).parent('tr').attr('class').replace('r', ''));
@@ -69,8 +69,15 @@
       var emptyEl = $('.r' + emptyState[0] + ' .d' + emptyState[1]);
       emptyEl.find('div').addClass('red');
       if (emptyState[0] === 3 && emptyState[1] === 3) {
-        emptyEl.find('div').addClass('green');
+        emptyEl.addClass('clipped-box');
         timerOn = false;
+
+        setTimeout(function() {
+          var Explode = new explode();
+          Explode.boom();
+          emptyEl.find('.red').hide();
+          $(document).off()
+        }, 1000);
       }
 
       $(_self).find('div').removeClass();
