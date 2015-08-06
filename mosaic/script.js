@@ -1,6 +1,22 @@
 (function($) {
   var emptyState = [3, 3];
   var redState = [0, 0];
+  var timerOn = false;
+  var start = 0.00;
+  var steps = 0;
+
+  function Timer() {
+    var t = setTimeout(function() {
+      $('#timer').text((start += 0.01).toFixed(2));
+      if (timerOn) {
+        Timer();
+      }
+      else {
+        timerOn = false;
+        clearTimeout(t);
+      }
+    }, 1000);
+  }
 
   function Blue(selector) {
     $(selector).addClass('blue');
@@ -25,6 +41,11 @@
 
   $(document).on('click', 'td', function() {
     var _self = this;
+    $('#steps').text(++steps);
+    if (!timerOn) {
+      Timer();
+      timerOn = true;
+    }
     var r = parseInt($(_self).parent('tr').attr('class').replace('r', ''));
     var d = parseInt($(_self).attr('class').replace('d', ''));
     var c = $(_self).find('div').css('backgroundColor');
@@ -49,6 +70,7 @@
       emptyEl.find('div').addClass('red');
       if (emptyState[0] === 3 && emptyState[1] === 3) {
         emptyEl.find('div').addClass('green');
+        timerOn = false;
       }
 
       $(_self).find('div').removeClass();
