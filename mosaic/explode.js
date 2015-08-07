@@ -1,6 +1,5 @@
 var explode = function(props) {
   props = props || {};
-  this.first = false;
   this.clicked = false;
   this.amount = props.amount || 5;
   this.element = document.querySelector('.clipped-box');
@@ -51,7 +50,7 @@ explode.prototype.boom = function() {
     _self.clicked = true;
 
     // Apply to each clipped-box div.
-    var els = document.querySelectorAll('.clipped');
+    var els = document.querySelectorAll('.clipped-box div');
     _self.each(els, function(el) {
 
       // So the speed is a random speed between 90m/s and 120m/s. I know that seems like a lot
